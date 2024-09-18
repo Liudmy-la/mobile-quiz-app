@@ -1,12 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
+import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
-
-import { useColorScheme } from '@/components/useColorScheme';
 import "../globals.css";
+import AuthProvider from '../lib/AuthProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -15,7 +12,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: 'tabs',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -45,15 +42,17 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  function RootLayoutNav() {
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false}}>
+      <Stack.Screen name="(tabs)"/>
+      <Stack.Screen name="(stack)"/>
+        <Stack.Screen name='index' />
+        <Stack.Screen name='register' />
+        </Stack>
+      </AuthProvider>
+  
   );
 }
